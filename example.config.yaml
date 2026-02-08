@@ -1,0 +1,14 @@
+dev: true
+server:
+  addr: :8080
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  database: ginx
+  password: ginx
+  user: ginx
+redis:
+  addr: 127.0.0.1:6379
+  db: 1
+  username:
+  password: ginx
