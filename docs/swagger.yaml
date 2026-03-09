@@ -1,7 +1,23 @@
 definitions:
-  login.LoginByPhoneParams:
+  core.Response:
+    properties:
+      code:
+        example: 0
+        type: integer
+      data:
+        type: any
+      msg:
+        example: success
+        type: string
     type: object
-  login.LoginInfoParams:
+  login.LoginByPhoneParams:
+    properties:
+      phone:
+        description: 手机号
+        example: "18999999999"
+        type: string
+    required:
+    - phone
     type: object
   login.SendPhoneCodeParams:
     properties:
@@ -37,7 +53,11 @@ paths:
           $ref: '#/definitions/login.LoginByPhoneParams'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/core.Response'
       summary: login_by_phone 接口
       tags:
       - login
@@ -46,16 +66,13 @@ paths:
       consumes:
       - application/json
       description: login_info 接口描述
-      parameters:
-      - description: 请求参数
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/login.LoginInfoParams'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/core.Response'
       summary: login_info 接口
       tags:
       - login
@@ -73,7 +90,11 @@ paths:
           $ref: '#/definitions/login.SendPhoneCodeParams'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/core.Response'
       summary: send_phone_code 接口
       tags:
       - login
@@ -91,8 +112,29 @@ paths:
           $ref: '#/definitions/user.DeleteAccountParams'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/core.Response'
       summary: delete_account 接口
+      tags:
+      - user
+  /api/user/detail:
+    get:
+      consumes:
+      - application/json
+      description: detail 接口描述
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/core.Response'
+      security:
+      - JWT: []
+      summary: detail 接口
       tags:
       - user
 schemes:

@@ -1,4 +1,4 @@
-.PHONY: help run build test clean get post module
+.PHONY: help run build test clean get post put delete module
 
 APP_NAME := ginx
 
@@ -15,6 +15,14 @@ get:
 post:
 	@chmod +x scripts/new_api.sh
 	@./scripts/new_api.sh $(_API_MODULE) $(_API_ACTION) POST
+
+put:
+	@chmod +x scripts/new_api.sh
+	@./scripts/new_api.sh $(_API_MODULE) $(_API_ACTION) PUT
+
+delete:
+	@chmod +x scripts/new_api.sh
+	@./scripts/new_api.sh $(_API_MODULE) $(_API_ACTION) DELETE
 
 # 捕获 module 后面的一个参数作为模块名
 # 用法: make module <module>

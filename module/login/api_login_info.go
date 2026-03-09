@@ -1,7 +1,7 @@
 package login
 
 import (
-  "ginx/core"
+	"ginx/core"
 	"ginx/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -22,7 +22,8 @@ type LoginInfoParams struct {
 // @Tags        login
 // @Accept      json
 // @Produce     json
-// @Param       request body LoginInfoParams true "请求参数"
+// @Param       request query LoginInfoParams true "请求参数"
+// @Success     200 {object} core.Response "成功响应"
 // @Router      /api/login/login_info [GET]
 func LoginInfo(c *gin.Context, params *LoginInfoParams) (data any, err error) {
 

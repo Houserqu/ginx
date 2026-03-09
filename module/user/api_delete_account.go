@@ -1,7 +1,7 @@
 package user
 
 import (
-  "ginx/core"
+	"ginx/core"
 	"ginx/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -23,6 +23,7 @@ type DeleteAccountParams struct {
 // @Accept      json
 // @Produce     json
 // @Param       request body DeleteAccountParams true "请求参数"
+// @Success     200 {object} core.Response "成功响应"
 // @Router      /api/user/delete_account [POST]
 func DeleteAccount(c *gin.Context, params *DeleteAccountParams) (data any, err error) {
 

@@ -4,6 +4,13 @@ package core
 
 import "github.com/gin-gonic/gin"
 
+// Response 统一响应结构体
+type Response struct {
+	Code int    `json:"code" example:"0"`
+	Msg  string `json:"msg" example:"success"`
+	Data any    `json:"data"`
+}
+
 func Success(c *gin.Context, data interface{}) {
 	c.JSON(200, gin.H{
 		"code": 0,

@@ -40,7 +40,14 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "成功响应",
+                        "schema": {
+                            "$ref": "#/definitions/core.Response"
+                        }
+                    }
+                }
             }
         },
         "/api/login/login_info": {
@@ -56,18 +63,14 @@ const docTemplate = `{
                     "login"
                 ],
                 "summary": "login_info 接口",
-                "parameters": [
-                    {
-                        "description": "请求参数",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
+                "responses": {
+                    "200": {
+                        "description": "成功响应",
                         "schema": {
-                            "$ref": "#/definitions/login.LoginInfoParams"
+                            "$ref": "#/definitions/core.Response"
                         }
                     }
-                ],
-                "responses": {}
+                }
             }
         },
         "/api/login/send_phone_code": {
@@ -94,7 +97,14 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "成功响应",
+                        "schema": {
+                            "$ref": "#/definitions/core.Response"
+                        }
+                    }
+                }
             }
         },
         "/api/user/delete_account": {
@@ -121,16 +131,74 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "成功响应",
+                        "schema": {
+                            "$ref": "#/definitions/core.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/detail": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "detail 接口描述",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "detail 接口",
+                "responses": {
+                    "200": {
+                        "description": "成功响应",
+                        "schema": {
+                            "$ref": "#/definitions/core.Response"
+                        }
+                    }
+                }
             }
         }
     },
     "definitions": {
-        "login.LoginByPhoneParams": {
-            "type": "object"
+        "core.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "data": {
+                    "type": "any"
+                },
+                "msg": {
+                    "type": "string",
+                    "example": "success"
+                }
+            }
         },
-        "login.LoginInfoParams": {
-            "type": "object"
+        "login.LoginByPhoneParams": {
+            "type": "object",
+            "required": [
+                "phone"
+            ],
+            "properties": {
+                "phone": {
+                    "description": "手机号",
+                    "type": "string",
+                    "example": "18999999999"
+                }
+            }
         },
         "login.SendPhoneCodeParams": {
             "type": "object",

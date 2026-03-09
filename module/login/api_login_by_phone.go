@@ -14,6 +14,7 @@ func init() {
 }
 
 type LoginByPhoneParams struct {
+	Phone string `json:"phone" binding:"required" example:"18999999999"` // 手机号
 }
 
 // LoginByPhone godoc
@@ -23,6 +24,7 @@ type LoginByPhoneParams struct {
 // @Accept      json
 // @Produce     json
 // @Param       request body LoginByPhoneParams true "请求参数"
+// @Success     200 {object} core.Response "成功响应"
 // @Router      /api/login/login_by_phone [POST]
 func LoginByPhone(c *gin.Context, params *LoginByPhoneParams) (data any, err error) {
 

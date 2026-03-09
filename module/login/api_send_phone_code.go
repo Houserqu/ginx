@@ -25,6 +25,7 @@ type SendPhoneCodeParams struct {
 // @Accept      json
 // @Produce     json
 // @Param       request body SendPhoneCodeParams true "请求参数"
+// @Success     200 {object} core.Response "成功响应"
 // @Router      /api/login/send_phone_code [POST]
 func SendPhoneCode(c *gin.Context, params *SendPhoneCodeParams) (data any, err error) {
 
