@@ -14,8 +14,6 @@ type User struct {
 	CreatedAt time.Time      `gorm:"column:created_at;type:datetime;default:CURRENT_TIMESTAMP;NOT NULL" json:"created_at"`
 	UpdatedAt time.Time      `gorm:"column:updated_at;type:datetime;default:CURRENT_TIMESTAMP;NOT NULL" json:"updated_at"`
 	DeletedAt gorm.DeletedAt `gorm:"column:deleted_at;type:datetime" json:"deleted_at"`
-
-	Teams []Team `gorm:"many2many:team_user;joinForeignKey:UserId;JoinReferences:TeamId" json:"teams"`
 }
 
 func (m *User) TableName() string {

@@ -1,0 +1,107 @@
+definitions:
+  login.LoginByPhoneParams:
+    type: object
+  login.LoginInfoParams:
+    type: object
+  login.SendPhoneCodeParams:
+    properties:
+      phone:
+        description: 手机号
+        type: string
+      scene:
+        description: 场景，例如 "login", "register", "reset_password" 等
+        type: string
+    required:
+    - phone
+    - scene
+    type: object
+  user.DeleteAccountParams:
+    type: object
+info:
+  contact: {}
+  description: 基于 Gin + Gorm 框架的 API 开发脚手架
+  title: ginx 项目 API 文档
+  version: "1.0"
+paths:
+  /api/login/login_by_phone:
+    post:
+      consumes:
+      - application/json
+      description: login_by_phone 接口描述
+      parameters:
+      - description: 请求参数
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/login.LoginByPhoneParams'
+      produces:
+      - application/json
+      responses: {}
+      summary: login_by_phone 接口
+      tags:
+      - login
+  /api/login/login_info:
+    get:
+      consumes:
+      - application/json
+      description: login_info 接口描述
+      parameters:
+      - description: 请求参数
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/login.LoginInfoParams'
+      produces:
+      - application/json
+      responses: {}
+      summary: login_info 接口
+      tags:
+      - login
+  /api/login/send_phone_code:
+    post:
+      consumes:
+      - application/json
+      description: send_phone_code 接口描述
+      parameters:
+      - description: 请求参数
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/login.SendPhoneCodeParams'
+      produces:
+      - application/json
+      responses: {}
+      summary: send_phone_code 接口
+      tags:
+      - login
+  /api/user/delete_account:
+    post:
+      consumes:
+      - application/json
+      description: delete_account 接口描述
+      parameters:
+      - description: 请求参数
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.DeleteAccountParams'
+      produces:
+      - application/json
+      responses: {}
+      summary: delete_account 接口
+      tags:
+      - user
+schemes:
+- http
+- https
+securityDefinitions:
+  JWT:
+    description: 'Bearer token 格式: "Bearer {token}"'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -3,13 +3,24 @@ package main
 import (
 	"ginx/core"
 	"ginx/middleware"
-	"ginx/module/user"
 	"ginx/utils"
+
+	_ "ginx/module/user"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
 
+// @title           ginx 项目 API 文档
+// @version         1.0
+// @description     基于 Gin + Gorm 框架的 API 开发脚手架
+
+// @securityDefinitions.apikey JWT
+// @in header
+// @name Authorization
+// @description Bearer token 格式: "Bearer {token}"
+
+// @schemes http https
 func main() {
 	// 初始化
 	core.InitConfig()
@@ -24,8 +35,11 @@ func main() {
 	svr.Use(gin.Recovery())
 	svr.Use(middleware.AccessMiddleware())
 
-	// 注册模块路由
-	user.InitRouter(svr)
+	// 注册路由
+	core.InitRoutes(svr)
+
+	// 注册 API 文档路由
+	core.InitDoc(svr)
 
 	// 启动服务器
 	svr.Run(viper.GetString("server.addr"))

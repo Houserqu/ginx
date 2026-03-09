@@ -1,0 +1,159 @@
+{
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "基于 Gin + Gorm 框架的 API 开发脚手架",
+        "title": "ginx 项目 API 文档",
+        "contact": {},
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/login/login_by_phone": {
+            "post": {
+                "description": "login_by_phone 接口描述",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "login"
+                ],
+                "summary": "login_by_phone 接口",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/login.LoginByPhoneParams"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/login/login_info": {
+            "get": {
+                "description": "login_info 接口描述",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "login"
+                ],
+                "summary": "login_info 接口",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/login.LoginInfoParams"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/login/send_phone_code": {
+            "post": {
+                "description": "send_phone_code 接口描述",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "login"
+                ],
+                "summary": "send_phone_code 接口",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/login.SendPhoneCodeParams"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/user/delete_account": {
+            "post": {
+                "description": "delete_account 接口描述",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "delete_account 接口",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.DeleteAccountParams"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        }
+    },
+    "definitions": {
+        "login.LoginByPhoneParams": {
+            "type": "object"
+        },
+        "login.LoginInfoParams": {
+            "type": "object"
+        },
+        "login.SendPhoneCodeParams": {
+            "type": "object",
+            "required": [
+                "phone",
+                "scene"
+            ],
+            "properties": {
+                "phone": {
+                    "description": "手机号",
+                    "type": "string"
+                },
+                "scene": {
+                    "description": "场景，例如 \"login\", \"register\", \"reset_password\" 等",
+                    "type": "string"
+                }
+            }
+        },
+        "user.DeleteAccountParams": {
+            "type": "object"
+        }
+    },
+    "securityDefinitions": {
+        "JWT": {
+            "description": "Bearer token 格式: \"Bearer {token}\"",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
