@@ -107,6 +107,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/product/book/create": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "create 接口描述",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product book"
+                ],
+                "summary": "create 接口",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/book.CreateParams"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功响应",
+                        "schema": {
+                            "$ref": "#/definitions/core.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/delete_account": {
             "post": {
                 "description": "delete_account 接口描述",
@@ -171,6 +210,9 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "book.CreateParams": {
+            "type": "object"
+        },
         "core.Response": {
             "type": "object",
             "properties": {

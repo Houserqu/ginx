@@ -1,4 +1,6 @@
 definitions:
+  book.CreateParams:
+    type: object
   core.Response:
     properties:
       code:
@@ -98,6 +100,30 @@ paths:
       summary: send_phone_code 接口
       tags:
       - login
+  /api/product/book/create:
+    post:
+      consumes:
+      - application/json
+      description: create 接口描述
+      parameters:
+      - description: 请求参数
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/book.CreateParams'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/core.Response'
+      security:
+      - JWT: []
+      summary: create 接口
+      tags:
+      - product book
   /api/user/delete_account:
     post:
       consumes:

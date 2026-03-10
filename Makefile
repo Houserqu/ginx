@@ -1,33 +1,36 @@
-.PHONY: help run build test clean get post put delete module
+.PHONY: help run build test clean api get post put delete
 
 APP_NAME := ginx
 
-# 捕获命令后面的两个参数作为 module 和 action
-# 用法: make get <module> <action> 或 make post <module> <action>
-_API_ARGS := $(wordlist 2, 3, $(MAKECMDGOALS))
-_API_MODULE := $(word 1, $(_API_ARGS))
-_API_ACTION := $(word 2, $(_API_ARGS))
+# 捕获命令后面的路径参数
+# 用法: make api <module/action>     (默认 POST)
+#       make get <module/action>
+#       make post <module/action>
+#       make put <module/action>
+#       make delete <module/action>
+# 示例: make api product/book/create
+#       make get product/book/list
+_API_PATH := $(word 2, $(MAKECMDGOALS))
+
+api:
+	@chmod +x scripts/new_api.sh
+	@./scripts/new_api.sh "$(_API_PATH)" POST
 
 get:
 	@chmod +x scripts/new_api.sh
-	@./scripts/new_api.sh $(_API_MODULE) $(_API_ACTION) GET
+	@./scripts/new_api.sh "$(_API_PATH)" GET
 
 post:
 	@chmod +x scripts/new_api.sh
-	@./scripts/new_api.sh $(_API_MODULE) $(_API_ACTION) POST
+	@./scripts/new_api.sh "$(_API_PATH)" POST
 
 put:
 	@chmod +x scripts/new_api.sh
-	@./scripts/new_api.sh $(_API_MODULE) $(_API_ACTION) PUT
+	@./scripts/new_api.sh "$(_API_PATH)" PUT
 
 delete:
 	@chmod +x scripts/new_api.sh
-	@./scripts/new_api.sh $(_API_MODULE) $(_API_ACTION) DELETE
-
-# 捕获 module 后面的一个参数作为模块名
-# 用法: make module <module>
-_MOD_ARGS := $(wordlist 2, 2, $(MAKECMDGOALS))
-_MOD_NAME := $(word 1, $(_MOD_ARGS))
+	@./scripts/new_api.sh "$(_API_PATH)" DELETE
 
 # 防止 Make 将命令行参数当作目标
 %:

@@ -1,20 +1,45 @@
 #!/bin/bash
-# 用法: ./scripts/new_api.sh <module> <action> [method]
-# 示例: make get order list 或 make post order create
+# 用法: ./scripts/new_api.sh <path> [method]
+# 示例: make api product/book/create
+#       make get product/book/list
+#       make post order/create
+#
+# <path> 格式: <模块路径>/<action>
+#   - 最后一段为 action（接口名）
+#   - 前面部分为模块路径（支持多级，如 product/book）
+#   - package 名取模块路径最后一段
 
 set -e
 
-MODULE=$1
-ACTION=$2
-METHOD=${3:-POST}
+FULL_PATH=$1
+METHOD=${2:-POST}
 METHOD=$(echo "$METHOD" | tr '[:lower:]' '[:upper:]')
 
-if [ -z "$MODULE" ] || [ -z "$ACTION" ]; then
-  echo "Usage: make get <module> <action> 或 make post <module> <action>"
-  echo "Example: make get order list"
-  echo "Example: make post order create"
+if [ -z "$FULL_PATH" ]; then
+  echo "Usage: make api <path> [method]"
+  echo "       make get <path>"
+  echo "       make post <path>"
+  echo ""
+  echo "Examples:"
+  echo "  make api product/book/create"
+  echo "  make get product/book/list"
+  echo "  make post order/create"
   exit 1
 fi
+
+# 提取 action（路径最后一段）和模块路径（其余部分）
+ACTION=$(basename "$FULL_PATH")
+MODULE_PATH=$(dirname "$FULL_PATH")
+
+# 兼容单段路径（如 "login"，此时 dirname 返回 "."）
+if [ "$MODULE_PATH" = "." ]; then
+  echo "Error: 路径至少需要两段，格式为 <module>/<action>"
+  echo "示例: make api login/login_by_phone"
+  exit 1
+fi
+
+# package 名取模块路径最后一段
+PACKAGE=$(basename "$MODULE_PATH")
 
 # 将 snake_case 转为 PascalCase
 to_pascal() {
@@ -23,9 +48,11 @@ to_pascal() {
 
 FUNC_NAME=$(to_pascal "$ACTION")
 PARAMS_STRUCT="${FUNC_NAME}Params"
-DIR="module/$MODULE"
-FILE="$DIR/api_${ACTION}.go"
-ROUTE="/api/${MODULE}/${ACTION}"
+DIR="module/${MODULE_PATH}"
+FILE="${DIR}/api_${ACTION}.go"
+ROUTE="/api/${FULL_PATH}"
+# Swagger Tags 使用完整模块路径（斜杠替换为/，便于分组）
+TAGS="${MODULE_PATH}"
 
 # GET 请求使用 query 参数，其他使用 body
 if [ "$METHOD" = "GET" ]; then
@@ -54,23 +81,20 @@ MODEOF
 fi
 
 # 如果模块未被导入则自动添加
-MODULE_IMPORT=$'\t'"_ \"matrix-api/module/$MODULE\""
-if ! grep -qF "ginx/module/$MODULE" "$MODULES_FILE"; then
-  # 检查是否已有 import 块
+MODULE_IMPORT=$'\t'"_ \"ginx/module/${MODULE_PATH}\""
+if ! grep -qF "ginx/module/${MODULE_PATH}" "$MODULES_FILE"; then
   if grep -q '^import' "$MODULES_FILE"; then
-    # 在 import 块的最后一个 _ 导入后插入
     sed -i '' "/^import/,/^)/{/^)/i\\
 $MODULE_IMPORT
 }" "$MODULES_FILE"
   else
-    # 追加新的 import 块
-    printf "\nimport (\n\t_ \"ginx/module/%s\"\n)\n" "$MODULE" >> "$MODULES_FILE"
+    printf "\nimport (\n\t_ \"ginx/module/%s\"\n)\n" "$MODULE_PATH" >> "$MODULES_FILE"
   fi
-  echo "已更新: $MODULES_FILE (添加 ginx/module/$MODULE)"
+  echo "已更新: $MODULES_FILE (添加 ginx/module/${MODULE_PATH})"
 fi
 
 cat > "$FILE" << EOF
-package $MODULE
+package $PACKAGE
 
 import (
 	"ginx/core"
@@ -91,7 +115,7 @@ type $PARAMS_STRUCT struct {
 // $FUNC_NAME godoc
 // @Summary     ${ACTION} 接口
 // @Description ${ACTION} 接口描述
-// @Tags        ${MODULE}
+// @Tags        ${TAGS}
 // @Accept      json
 // @Produce     json
 ${SWAGGER_PARAM}
