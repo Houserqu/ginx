@@ -54,7 +54,7 @@ MODEOF
 fi
 
 # 如果模块未被导入则自动添加
-MODULE_IMPORT="\t_ \"ginx/module/$MODULE\""
+MODULE_IMPORT=$'\t'"_ \"matrix-api/module/$MODULE\""
 if ! grep -qF "ginx/module/$MODULE" "$MODULES_FILE"; then
   # 检查是否已有 import 块
   if grep -q '^import' "$MODULES_FILE"; then
