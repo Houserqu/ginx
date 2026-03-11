@@ -1,6 +1,10 @@
 package core
 
-import "github.com/gin-gonic/gin"
+import (
+	"reflect"
+
+	"github.com/gin-gonic/gin"
+)
 
 var globalRoutes []func(*gin.Engine)
 
@@ -21,10 +25,33 @@ func Handler[T any](fn func(*gin.Context, T) (data any, err error)) gin.HandlerF
 		// 参数绑定
 		var req T
 
-		if err := c.ShouldBind(&req); err != nil {
-			Error(c, err.Error())
-			c.Abort()
-			return
+		// 若 T 为指针类型（如 *FooParams），需先初始化防止 nil 解引用
+		v := reflect.ValueOf(&req).Elem()
+		isPtr := v.Kind() == reflect.Ptr
+		if isPtr {
+			v.Set(reflect.New(v.Type().Elem()))
+		}
+
+		// 绑定目标：指针类型直接用 req（本身已是指针），值类型取地址
+		var bindTarget any
+		if isPtr {
+			bindTarget = req
+		} else {
+			bindTarget = &req
+		}
+
+		if c.Request.Method == "GET" {
+			if err := c.ShouldBindQuery(bindTarget); err != nil {
+				Error(c, err.Error())
+				c.Abort()
+				return
+			}
+		} else {
+			if err := c.ShouldBindJSON(bindTarget); err != nil {
+				Error(c, err.Error())
+				c.Abort()
+				return
+			}
 		}
 
 		data, err := fn(c, req)
